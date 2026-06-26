@@ -9,6 +9,12 @@
     },
     {
       "path": "./packages/language-model-ai-sdk"
+    },
+    {
+      "path": "./packages/language-model-anthropic"
+    },
+    {
+      "path": "./packages/language-model-openai"
     }
   ]
 }

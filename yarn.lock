@@ -14,38 +14,36 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@anthropic-ai/sdk@npm:0.106.0":
+  version: 0.106.0
+  resolution: "@anthropic-ai/sdk@npm:0.106.0"
+  dependencies:
+    json-schema-to-ts: "npm:^3.1.1"
+    standardwebhooks: "npm:^1.0.0"
+  peerDependencies:
+    zod: ^3.25.0 || ^4.0.0
+  peerDependenciesMeta:
+    zod:
+      optional: true
+  bin:
+    anthropic-ai-sdk: bin/cli
+  checksum: 10c0/65961f0f86a0c263e4ebb5b754d3abbae432ec742946dfbaba33cde22679334aff097afb04c5c6d8d1a794e046a560e6e68f564f4357592b4aa0bd7be0a17d80
+  languageName: node
+  linkType: hard
+
+"@babel/runtime@npm:^7.18.3":
+  version: 7.29.7
+  resolution: "@babel/runtime@npm:7.29.7"
+  checksum: 10c0/ca11572f7146b21e0bde6a9ed4bb6a89eafbee5f0944c7eb54d0d8a2dac962c33638a1d611e14faa71dfbb92b4b5f9236232208568a6b7d5c6f3f39ddb91771e
+  languageName: node
+  linkType: hard
+
 "@effect/language-service@npm:latest":
   version: 0.86.2
   resolution: "@effect/language-service@npm:0.86.2"
   bin:
     effect-language-service: cli.js
   checksum: 10c0/fe27ac518e1aa292d5badb0c055fbebf6d6bb75758a6a169d9d7ea5dff8a58a89f486331cc520f8427a7fff596497c3bbae40f1e65b2165c3beca07cfe9f168c
-  languageName: node
-  linkType: hard
-
-"@effect/platform-node-shared@npm:^4.0.0-beta.88":
-  version: 4.0.0-beta.88
-  resolution: "@effect/platform-node-shared@npm:4.0.0-beta.88"
-  dependencies:
-    "@types/ws": "npm:^8.18.1"
-    ws: "npm:^8.20.0"
-  peerDependencies:
-    effect: ^4.0.0-beta.88
-  checksum: 10c0/f566d8c283350018053c3d2409d4cd02a88b690c1b87acb9a07996769131c9ef9c963b3f04ced25a7765780c9c64559e3ea86655f335859fff2bd9185e199d53
-  languageName: node
-  linkType: hard
-
-"@effect/platform-node@npm:4.0.0-beta.88":
-  version: 4.0.0-beta.88
-  resolution: "@effect/platform-node@npm:4.0.0-beta.88"
-  dependencies:
-    "@effect/platform-node-shared": "npm:^4.0.0-beta.88"
-    mime: "npm:^4.1.0"
-    undici: "npm:^8.2.0"
-  peerDependencies:
-    effect: ^4.0.0-beta.88
-    ioredis: ^5.7.0
-  checksum: 10c0/e4513e5b01d08ceb4eb31e3e523b8a3a3903095fab32e89e42c7bb29fd837ff77ad9f7c35d2225d88d629e70f70ea951e219f03abe0e1360786c7d0052e45e85
   languageName: node
   linkType: hard
 
@@ -282,11 +280,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nmnmcc/e-agent@workspace:packages/agent":
+"@nmnmcc/e-agent-example-basic@workspace:packages/agent/examples/basic":
+  version: 0.0.0-use.local
+  resolution: "@nmnmcc/e-agent-example-basic@workspace:packages/agent/examples/basic"
+  dependencies:
+    "@nmnmcc/e-agent": "workspace:*"
+    "@nmnmcc/e-language-model-openai": "workspace:*"
+    effect: "npm:4.0.0-beta.88"
+    tsx: "npm:^4.22.4"
+    typescript: "npm:^6.0.3"
+  languageName: unknown
+  linkType: soft
+
+"@nmnmcc/e-agent@workspace:*, @nmnmcc/e-agent@workspace:packages/agent":
   version: 0.0.0-use.local
   resolution: "@nmnmcc/e-agent@workspace:packages/agent"
   dependencies:
-    "@effect/platform-node": "npm:4.0.0-beta.88"
+    "@nmnmcc/e-language-model": "workspace:*"
     effect: "npm:4.0.0-beta.88"
   languageName: unknown
   linkType: soft
@@ -301,6 +311,26 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@nmnmcc/e-language-model-anthropic@workspace:packages/language-model-anthropic":
+  version: 0.0.0-use.local
+  resolution: "@nmnmcc/e-language-model-anthropic@workspace:packages/language-model-anthropic"
+  dependencies:
+    "@anthropic-ai/sdk": "npm:0.106.0"
+    "@nmnmcc/e-language-model": "workspace:*"
+    effect: "npm:4.0.0-beta.88"
+  languageName: unknown
+  linkType: soft
+
+"@nmnmcc/e-language-model-openai@workspace:*, @nmnmcc/e-language-model-openai@workspace:packages/language-model-openai":
+  version: 0.0.0-use.local
+  resolution: "@nmnmcc/e-language-model-openai@workspace:packages/language-model-openai"
+  dependencies:
+    "@nmnmcc/e-language-model": "workspace:*"
+    effect: "npm:4.0.0-beta.88"
+    openai: "npm:6.45.0"
+  languageName: unknown
+  linkType: soft
+
 "@nmnmcc/e-language-model@workspace:*, @nmnmcc/e-language-model@workspace:packages/language-model":
   version: 0.0.0-use.local
   resolution: "@nmnmcc/e-language-model@workspace:packages/language-model"
@@ -309,19 +339,17 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@stablelib/base64@npm:^1.0.0":
+  version: 1.0.1
+  resolution: "@stablelib/base64@npm:1.0.1"
+  checksum: 10c0/6330720f021819d19cecfe274111b79a256caa81df478d6b0ae7effc8842b96915b6aeed85926ff05b4d48ec1fc78ad043d928b730ee4e6cc6e8cba6aa097bed
+  languageName: node
+  linkType: hard
+
 "@standard-schema/spec@npm:^1.1.0":
   version: 1.1.0
   resolution: "@standard-schema/spec@npm:1.1.0"
   checksum: 10c0/d90f55acde4b2deb983529c87e8025fa693de1a5e8b49ecc6eb84d1fd96328add0e03d7d551442156c7432fd78165b2c26ff561b970a9a881f046abb78d6a526
-  languageName: node
-  linkType: hard
-
-"@types/node@npm:*":
-  version: 26.0.1
-  resolution: "@types/node@npm:26.0.1"
-  dependencies:
-    undici-types: "npm:~8.3.0"
-  checksum: 10c0/31d204333c70124da6bcac7d1f27d8980149fe3f95a8419bfcd19c3e5823705c0e370d71ac34399352e1263b2d5fc41c87af964ec81e5a05a32224d65d8d224e
   languageName: node
   linkType: hard
 
@@ -331,15 +359,6 @@ __metadata:
   dependencies:
     undici-types: "npm:~8.3.0"
   checksum: 10c0/f36e21634fd8e8ded162ca486508bd8bb229d398a8d5541f6d8c1255968d4464e53327a77f403b216ef98e3b6f6956882eef83e4857d4bc2be9569dd55d37aae
-  languageName: node
-  linkType: hard
-
-"@types/ws@npm:^8.18.1":
-  version: 8.18.1
-  resolution: "@types/ws@npm:8.18.1"
-  dependencies:
-    "@types/node": "npm:*"
-  checksum: 10c0/61aff1129143fcc4312f083bc9e9e168aa3026b7dd6e70796276dcfb2c8211c4292603f9c4864fae702f2ed86e4abd4d38aa421831c2fd7f856c931a481afbab
   languageName: node
   linkType: hard
 
@@ -494,6 +513,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"fast-sha256@npm:^1.3.0":
+  version: 1.3.0
+  resolution: "fast-sha256@npm:1.3.0"
+  checksum: 10c0/87f9e4baa7639576cf60a2b6235c9f436e1a1c52323abbd8a705b5bea8355500acf176f2aed0c14f2ecd6d6007e26151461bab2f27b8953bcca8d9d6b76a86e4
+  languageName: node
+  linkType: hard
+
 "fdir@npm:^6.5.0":
   version: 6.5.0
   resolution: "fdir@npm:6.5.0"
@@ -553,6 +579,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"json-schema-to-ts@npm:^3.1.1":
+  version: 3.1.1
+  resolution: "json-schema-to-ts@npm:3.1.1"
+  dependencies:
+    "@babel/runtime": "npm:^7.18.3"
+    ts-algebra: "npm:^2.0.0"
+  checksum: 10c0/609bae04aa5e860a11b6d30ccf41445fae1c7f66fb600c1d170257cf33aa468aa9d03aa046428c3688aff0ff450c2b0c76584b66fa4a5d0da8e33799e4c439a6
+  languageName: node
+  linkType: hard
+
 "json-schema@npm:^0.4.0":
   version: 0.4.0
   resolution: "json-schema@npm:0.4.0"
@@ -564,15 +600,6 @@ __metadata:
   version: 1.30.0
   resolution: "kubernetes-types@npm:1.30.0"
   checksum: 10c0/de3641e4f50cfc123c4102a73c12932e1db8e51783c7cae4ea8ad3561bd56fab0f1c2346801f84a4c36aae8cea0b25d21e9514cc0fcecd4d64b1314043263076
-  languageName: node
-  linkType: hard
-
-"mime@npm:^4.1.0":
-  version: 4.1.0
-  resolution: "mime@npm:4.1.0"
-  bin:
-    mime: bin/cli.js
-  checksum: 10c0/3b8602e50dff1049aea8bb2d4c65afc55bf7f3eb5c17fd2bcb315b8c8ae225a7553297d424d3621757c24cdba99e930ecdc4108467009cdc7ed55614cd55031d
   languageName: node
   linkType: hard
 
@@ -686,6 +713,30 @@ __metadata:
   languageName: node
   linkType: hard
 
+"openai@npm:6.45.0":
+  version: 6.45.0
+  resolution: "openai@npm:6.45.0"
+  peerDependencies:
+    "@aws-sdk/credential-provider-node": ">=3.972.0 <4"
+    "@smithy/hash-node": ">=4.3.0 <5"
+    "@smithy/signature-v4": ">=5.4.0 <6"
+    ws: ^8.18.0
+    zod: ^3.25 || ^4.0
+  peerDependenciesMeta:
+    "@aws-sdk/credential-provider-node":
+      optional: true
+    "@smithy/hash-node":
+      optional: true
+    "@smithy/signature-v4":
+      optional: true
+    ws:
+      optional: true
+    zod:
+      optional: true
+  checksum: 10c0/d59fdcb75d20e81f6b1d4c0a0591dfd10b8078ed6a0d2ae1abc7768efc70106a1e94ccbc9b9c01d31dcecc73285be767d7418a115647c631f4cb58202f55eafa
+  languageName: node
+  linkType: hard
+
 "picomatch@npm:^4.0.4":
   version: 4.0.4
   resolution: "picomatch@npm:4.0.4"
@@ -737,6 +788,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"standardwebhooks@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "standardwebhooks@npm:1.0.0"
+  dependencies:
+    "@stablelib/base64": "npm:^1.0.0"
+    fast-sha256: "npm:^1.3.0"
+  checksum: 10c0/aee097d0f3c05172c19b80df1ed9596a2ce92f8956957650d0bbe47c2ca6d36515796b51d523333cb4a48c889b2ab130d789e7879e14975c4381bc7a61274327
+  languageName: node
+  linkType: hard
+
 "tar@npm:^7.5.4":
   version: 7.5.16
   resolution: "tar@npm:7.5.16"
@@ -764,6 +825,13 @@ __metadata:
   version: 4.1.1
   resolution: "toml@npm:4.1.1"
   checksum: 10c0/077bc02ac1ce82091ea073f675d7e2a1df487d1b18bbc7e653daba4956d545954b7095e979b8792f0837339b901ee190ad4464342e5e377c36bbdeca8903e079
+  languageName: node
+  linkType: hard
+
+"ts-algebra@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "ts-algebra@npm:2.0.0"
+  checksum: 10c0/4ae93bec1bada635bba425854eec323dad50b6ffe86bc04ad2d7f9ce3fb129d673dcf483e19a6e70d07a3a9083e6a0a7f4e004bb8d2164cddc60cc9540ba187f
   languageName: node
   linkType: hard
 
@@ -816,13 +884,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"undici@npm:^8.2.0":
-  version: 8.5.0
-  resolution: "undici@npm:8.5.0"
-  checksum: 10c0/7c25fd96a4dcc607b905995f6feec948f74a6759cadbea4c6eb9402517aab4887987c8001c80d482297d04f975f44a383325b89577ac21e587983ed088408065
-  languageName: node
-  linkType: hard
-
 "uuid@npm:^14.0.0":
   version: 14.0.1
   resolution: "uuid@npm:14.0.1"
@@ -840,21 +901,6 @@ __metadata:
   bin:
     node-which: bin/which.js
   checksum: 10c0/ca0b54f198f78bbc4b7c02e34bda8d335cb352e0adb4cbca1c37b1a957af3a879a82c4c27ca6525bc942f548d8b64f816ef6528360af9f3de55ffb9b979b620d
-  languageName: node
-  linkType: hard
-
-"ws@npm:^8.20.0":
-  version: 8.21.0
-  resolution: "ws@npm:8.21.0"
-  peerDependencies:
-    bufferutil: ^4.0.1
-    utf-8-validate: ">=5.0.2"
-  peerDependenciesMeta:
-    bufferutil:
-      optional: true
-    utf-8-validate:
-      optional: true
-  checksum: 10c0/ef4a243476283fc49bc7550966c4af4aa0eef56273837211e700de3b664e08604a760cdddcb5ba43c049140e74ccfec5b0ee0bb439e08c2adf9138902fdde5f9
   languageName: node
   linkType: hard
 

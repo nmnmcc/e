@@ -133,7 +133,7 @@ export interface BaseTagged<Tag extends string> {
  * @since 1.0.0
  */
 export interface ProviderOptionsPart {
-  readonly providerOptions?: ProviderOptions;
+  readonly providerOptions?: ProviderOptions | undefined;
 }
 
 /**
@@ -161,7 +161,7 @@ export interface BasePart<Tag extends string> extends BaseTagged<Tag>, ProviderO
  * @since 1.0.0
  */
 export interface BaseContent<Tag extends string> extends BaseTagged<Tag> {
-  readonly providerMetadata?: ProviderMetadata;
+  readonly providerMetadata?: ProviderMetadata | undefined;
 }
 
 /**
@@ -189,7 +189,7 @@ export interface BaseStreamPart<Tag extends string> extends BaseTagged<Tag> {}
  * @since 1.0.0
  */
 export interface BaseMetadataStreamPart<Tag extends string> extends BaseStreamPart<Tag> {
-  readonly providerMetadata?: ProviderMetadata;
+  readonly providerMetadata?: ProviderMetadata | undefined;
 }
 
 /**
@@ -291,14 +291,62 @@ export interface ToolMessage extends BaseMessage<"tool"> {
 }
 
 /**
+ * Prompt part.
+ *
+ * @category prompt
+ * @since 1.0.0
+ */
+export type Part = Data.TaggedEnum<{
+  Text: {
+    readonly text: string;
+    readonly providerOptions?: ProviderOptions | undefined;
+  };
+  Reasoning: {
+    readonly text: string;
+    readonly providerOptions?: ProviderOptions | undefined;
+  };
+  File: {
+    readonly data: DataContent;
+    readonly mediaType: string;
+    readonly filename?: string | undefined;
+    readonly providerOptions?: ProviderOptions | undefined;
+  };
+  ToolCall: {
+    readonly id: string;
+    readonly name: string;
+    readonly input: unknown;
+    readonly providerExecuted?: boolean | undefined;
+    readonly providerOptions?: ProviderOptions | undefined;
+  };
+  ToolResult: {
+    readonly id: string;
+    readonly name: string;
+    readonly output: ToolResultOutput;
+    readonly providerOptions?: ProviderOptions | undefined;
+  };
+  ToolApprovalResponse: {
+    readonly id: string;
+    readonly approved: boolean;
+    readonly reason?: string | undefined;
+    readonly providerOptions?: ProviderOptions | undefined;
+  };
+}>;
+
+/**
+ * Prompt part constructors.
+ *
+ * @category constructors
+ * @since 1.0.0
+ */
+export const Part = Data.taggedEnum<Part>();
+
+/**
  * Text prompt part.
  *
  * @category prompt
  * @since 1.0.0
  */
-export interface TextPart extends BasePart<"Text"> {
-  readonly text: string;
-}
+export type TextPart = Data.TaggedEnum.Value<Part, "Text">;
 
 /**
  * Reasoning prompt part.
@@ -306,9 +354,7 @@ export interface TextPart extends BasePart<"Text"> {
  * @category prompt
  * @since 1.0.0
  */
-export interface ReasoningPart extends BasePart<"Reasoning"> {
-  readonly text: string;
-}
+export type ReasoningPart = Data.TaggedEnum.Value<Part, "Reasoning">;
 
 /**
  * File prompt part.
@@ -316,11 +362,7 @@ export interface ReasoningPart extends BasePart<"Reasoning"> {
  * @category prompt
  * @since 1.0.0
  */
-export interface FilePart extends BasePart<"File"> {
-  readonly data: DataContent;
-  readonly mediaType: string;
-  readonly filename?: string;
-}
+export type FilePart = Data.TaggedEnum.Value<Part, "File">;
 
 /**
  * Tool call prompt part.
@@ -328,12 +370,7 @@ export interface FilePart extends BasePart<"File"> {
  * @category prompt
  * @since 1.0.0
  */
-export interface ToolCallPart extends BasePart<"ToolCall"> {
-  readonly id: string;
-  readonly name: string;
-  readonly input: unknown;
-  readonly providerExecuted?: boolean;
-}
+export type ToolCallPart = Data.TaggedEnum.Value<Part, "ToolCall">;
 
 /**
  * Tool result prompt part.
@@ -341,11 +378,7 @@ export interface ToolCallPart extends BasePart<"ToolCall"> {
  * @category prompt
  * @since 1.0.0
  */
-export interface ToolResultPart extends BasePart<"ToolResult"> {
-  readonly id: string;
-  readonly name: string;
-  readonly output: ToolResultOutput;
-}
+export type ToolResultPart = Data.TaggedEnum.Value<Part, "ToolResult">;
 
 /**
  * Tool result output.
@@ -353,7 +386,28 @@ export interface ToolResultPart extends BasePart<"ToolResult"> {
  * @category prompt
  * @since 1.0.0
  */
-export type ToolResultOutput = TextToolResultOutput | JsonToolResultOutput | ExecutionDeniedToolResultOutput;
+export type ToolResultOutput = Data.TaggedEnum<{
+  Text: {
+    readonly value: string;
+    readonly providerOptions?: ProviderOptions | undefined;
+  };
+  Json: {
+    readonly value: Schema.Json;
+    readonly providerOptions?: ProviderOptions | undefined;
+  };
+  ExecutionDenied: {
+    readonly reason?: string | undefined;
+    readonly providerOptions?: ProviderOptions | undefined;
+  };
+}>;
+
+/**
+ * Tool result output constructors.
+ *
+ * @category constructors
+ * @since 1.0.0
+ */
+export const ToolResultOutput = Data.taggedEnum<ToolResultOutput>();
 
 /**
  * Text tool result output.
@@ -361,9 +415,7 @@ export type ToolResultOutput = TextToolResultOutput | JsonToolResultOutput | Exe
  * @category prompt
  * @since 1.0.0
  */
-export interface TextToolResultOutput extends BasePart<"Text"> {
-  readonly value: string;
-}
+export type TextToolResultOutput = Data.TaggedEnum.Value<ToolResultOutput, "Text">;
 
 /**
  * JSON tool result output.
@@ -371,9 +423,7 @@ export interface TextToolResultOutput extends BasePart<"Text"> {
  * @category prompt
  * @since 1.0.0
  */
-export interface JsonToolResultOutput extends BasePart<"Json"> {
-  readonly value: Schema.Json;
-}
+export type JsonToolResultOutput = Data.TaggedEnum.Value<ToolResultOutput, "Json">;
 
 /**
  * Tool result output for denied execution.
@@ -381,9 +431,7 @@ export interface JsonToolResultOutput extends BasePart<"Json"> {
  * @category prompt
  * @since 1.0.0
  */
-export interface ExecutionDeniedToolResultOutput extends BasePart<"ExecutionDenied"> {
-  readonly reason?: string;
-}
+export type ExecutionDeniedToolResultOutput = Data.TaggedEnum.Value<ToolResultOutput, "ExecutionDenied">;
 
 /**
  * Tool approval response prompt part.
@@ -391,11 +439,7 @@ export interface ExecutionDeniedToolResultOutput extends BasePart<"ExecutionDeni
  * @category prompt
  * @since 1.0.0
  */
-export interface ToolApprovalResponsePart extends BasePart<"ToolApprovalResponse"> {
-  readonly id: string;
-  readonly approved: boolean;
-  readonly reason?: string;
-}
+export type ToolApprovalResponsePart = Data.TaggedEnum.Value<Part, "ToolApprovalResponse">;
 
 /**
  * Options for a language model call.
@@ -405,21 +449,21 @@ export interface ToolApprovalResponsePart extends BasePart<"ToolApprovalResponse
  */
 export interface GenerateOptions {
   readonly prompt: Prompt;
-  readonly maxOutputTokens?: number;
-  readonly temperature?: number;
-  readonly stopSequences?: ReadonlyArray<string>;
-  readonly topP?: number;
-  readonly topK?: number;
-  readonly presencePenalty?: number;
-  readonly frequencyPenalty?: number;
-  readonly responseFormat?: ResponseFormat;
-  readonly seed?: number;
-  readonly tools?: ReadonlyArray<FunctionTool | ProviderTool>;
-  readonly toolChoice?: ToolChoice;
-  readonly includeRaw?: boolean;
-  readonly abortSignal?: AbortSignal;
-  readonly headers?: Readonly<Record<string, string | undefined>>;
-  readonly providerOptions?: ProviderOptions;
+  readonly maxOutputTokens?: number | undefined;
+  readonly temperature?: number | undefined;
+  readonly stopSequences?: ReadonlyArray<string> | undefined;
+  readonly topP?: number | undefined;
+  readonly topK?: number | undefined;
+  readonly presencePenalty?: number | undefined;
+  readonly frequencyPenalty?: number | undefined;
+  readonly responseFormat?: ResponseFormat | undefined;
+  readonly seed?: number | undefined;
+  readonly tools?: ReadonlyArray<FunctionTool | ProviderTool> | undefined;
+  readonly toolChoice?: ToolChoice | undefined;
+  readonly includeRaw?: boolean | undefined;
+  readonly abortSignal?: AbortSignal | undefined;
+  readonly headers?: Readonly<Record<string, string | undefined>> | undefined;
+  readonly providerOptions?: ProviderOptions | undefined;
 }
 
 /**
@@ -428,7 +472,22 @@ export interface GenerateOptions {
  * @category options
  * @since 1.0.0
  */
-export type ResponseFormat = TextResponseFormat | JsonResponseFormat;
+export type ResponseFormat = Data.TaggedEnum<{
+  Text: {};
+  Json: {
+    readonly schema?: JsonSchema | undefined;
+    readonly name?: string | undefined;
+    readonly description?: string | undefined;
+  };
+}>;
+
+/**
+ * Response format constructors.
+ *
+ * @category constructors
+ * @since 1.0.0
+ */
+export const ResponseFormat = Data.taggedEnum<ResponseFormat>();
 
 /**
  * Text response format.
@@ -436,7 +495,7 @@ export type ResponseFormat = TextResponseFormat | JsonResponseFormat;
  * @category options
  * @since 1.0.0
  */
-export interface TextResponseFormat extends BaseResponseFormat<"Text"> {}
+export type TextResponseFormat = Data.TaggedEnum.Value<ResponseFormat, "Text">;
 
 /**
  * JSON response format.
@@ -444,11 +503,7 @@ export interface TextResponseFormat extends BaseResponseFormat<"Text"> {}
  * @category options
  * @since 1.0.0
  */
-export interface JsonResponseFormat extends BaseResponseFormat<"Json"> {
-  readonly schema?: JsonSchema;
-  readonly name?: string;
-  readonly description?: string;
-}
+export type JsonResponseFormat = Data.TaggedEnum.Value<ResponseFormat, "Json">;
 
 /**
  * Function tool configuration.
@@ -456,13 +511,37 @@ export interface JsonResponseFormat extends BaseResponseFormat<"Json"> {
  * @category tools
  * @since 1.0.0
  */
-export interface FunctionTool extends BaseTool<"Function"> {
-  readonly description?: string;
-  readonly inputSchema: JsonSchema;
-  readonly inputExamples?: ReadonlyArray<{ readonly input: Schema.JsonObject }>;
-  readonly strict?: boolean;
-  readonly providerOptions?: ProviderOptions;
-}
+export type Tool = Data.TaggedEnum<{
+  Function: {
+    readonly name: string;
+    readonly description?: string | undefined;
+    readonly input: JsonSchema;
+    readonly inputExamples?: ReadonlyArray<{ readonly input: Schema.JsonObject }> | undefined;
+    readonly strict?: boolean | undefined;
+    readonly providerOptions?: ProviderOptions | undefined;
+  };
+  Provider: {
+    readonly name: string;
+    readonly id: `${string}.${string}`;
+    readonly args: Readonly<Record<string, unknown>>;
+  };
+}>;
+
+/**
+ * Tool configuration constructors.
+ *
+ * @category constructors
+ * @since 1.0.0
+ */
+export const Tool = Data.taggedEnum<Tool>();
+
+/**
+ * Function tool configuration.
+ *
+ * @category tools
+ * @since 1.0.0
+ */
+export type FunctionTool = Data.TaggedEnum.Value<Tool, "Function">;
 
 /**
  * Provider tool configuration.
@@ -470,10 +549,7 @@ export interface FunctionTool extends BaseTool<"Function"> {
  * @category tools
  * @since 1.0.0
  */
-export interface ProviderTool extends BaseTool<"Provider"> {
-  readonly id: `${string}.${string}`;
-  readonly args: Readonly<Record<string, unknown>>;
-}
+export type ProviderTool = Data.TaggedEnum.Value<Tool, "Provider">;
 
 /**
  * Tool choice policy.
@@ -481,7 +557,22 @@ export interface ProviderTool extends BaseTool<"Provider"> {
  * @category tools
  * @since 1.0.0
  */
-export type ToolChoice = AutoToolChoice | NoneToolChoice | RequiredToolChoice | NamedToolChoice;
+export type ToolChoice = Data.TaggedEnum<{
+  Auto: {};
+  None: {};
+  Required: {};
+  Named: {
+    readonly name: string;
+  };
+}>;
+
+/**
+ * Tool choice constructors.
+ *
+ * @category constructors
+ * @since 1.0.0
+ */
+export const ToolChoice = Data.taggedEnum<ToolChoice>();
 
 /**
  * Automatic tool choice.
@@ -489,7 +580,7 @@ export type ToolChoice = AutoToolChoice | NoneToolChoice | RequiredToolChoice | 
  * @category tools
  * @since 1.0.0
  */
-export interface AutoToolChoice extends BaseToolChoice<"Auto"> {}
+export type AutoToolChoice = Data.TaggedEnum.Value<ToolChoice, "Auto">;
 
 /**
  * No tool choice.
@@ -497,7 +588,7 @@ export interface AutoToolChoice extends BaseToolChoice<"Auto"> {}
  * @category tools
  * @since 1.0.0
  */
-export interface NoneToolChoice extends BaseToolChoice<"None"> {}
+export type NoneToolChoice = Data.TaggedEnum.Value<ToolChoice, "None">;
 
 /**
  * Required tool choice.
@@ -505,7 +596,7 @@ export interface NoneToolChoice extends BaseToolChoice<"None"> {}
  * @category tools
  * @since 1.0.0
  */
-export interface RequiredToolChoice extends BaseToolChoice<"Required"> {}
+export type RequiredToolChoice = Data.TaggedEnum.Value<ToolChoice, "Required">;
 
 /**
  * Named tool choice.
@@ -513,9 +604,7 @@ export interface RequiredToolChoice extends BaseToolChoice<"Required"> {}
  * @category tools
  * @since 1.0.0
  */
-export interface NamedToolChoice extends BaseToolChoice<"Named"> {
-  readonly name: string;
-}
+export type NamedToolChoice = Data.TaggedEnum.Value<ToolChoice, "Named">;
 
 /**
  * Generated content.
@@ -523,7 +612,64 @@ export interface NamedToolChoice extends BaseToolChoice<"Named"> {
  * @category content
  * @since 1.0.0
  */
-export type Content = Text | Reasoning | File | ToolApprovalRequest | Source | ToolCall | ToolResult;
+export type Content = Data.TaggedEnum<{
+  Text: {
+    readonly text: string;
+    readonly providerMetadata?: ProviderMetadata | undefined;
+  };
+  Reasoning: {
+    readonly text: string;
+    readonly providerMetadata?: ProviderMetadata | undefined;
+  };
+  File: {
+    readonly mediaType: string;
+    readonly data: string | Uint8Array;
+    readonly providerMetadata?: ProviderMetadata | undefined;
+  };
+  UrlSource: {
+    readonly id: string;
+    readonly url: string;
+    readonly title?: string | undefined;
+    readonly providerMetadata?: ProviderMetadata | undefined;
+  };
+  DocumentSource: {
+    readonly id: string;
+    readonly mediaType: string;
+    readonly title: string;
+    readonly filename?: string | undefined;
+    readonly providerMetadata?: ProviderMetadata | undefined;
+  };
+  ToolApprovalRequest: {
+    readonly id: string;
+    readonly callId: string;
+    readonly providerMetadata?: ProviderMetadata | undefined;
+  };
+  ToolCall: {
+    readonly id: string;
+    readonly name: string;
+    readonly input: string;
+    readonly providerExecuted?: boolean | undefined;
+    readonly dynamic?: boolean | undefined;
+    readonly providerMetadata?: ProviderMetadata | undefined;
+  };
+  ToolResult: {
+    readonly id: string;
+    readonly name: string;
+    readonly result: NonNullable<Schema.Json>;
+    readonly isError?: boolean | undefined;
+    readonly preliminary?: boolean | undefined;
+    readonly dynamic?: boolean | undefined;
+    readonly providerMetadata?: ProviderMetadata | undefined;
+  };
+}>;
+
+/**
+ * Generated content constructors.
+ *
+ * @category constructors
+ * @since 1.0.0
+ */
+export const Content = Data.taggedEnum<Content>();
 
 /**
  * Generated text.
@@ -531,9 +677,7 @@ export type Content = Text | Reasoning | File | ToolApprovalRequest | Source | T
  * @category content
  * @since 1.0.0
  */
-export interface Text extends BaseContent<"Text"> {
-  readonly text: string;
-}
+export type Text = Data.TaggedEnum.Value<Content, "Text">;
 
 /**
  * Generated reasoning.
@@ -541,9 +685,7 @@ export interface Text extends BaseContent<"Text"> {
  * @category content
  * @since 1.0.0
  */
-export interface Reasoning extends BaseContent<"Reasoning"> {
-  readonly text: string;
-}
+export type Reasoning = Data.TaggedEnum.Value<Content, "Reasoning">;
 
 /**
  * Generated file.
@@ -551,10 +693,7 @@ export interface Reasoning extends BaseContent<"Reasoning"> {
  * @category content
  * @since 1.0.0
  */
-export interface File extends BaseContent<"File"> {
-  readonly mediaType: string;
-  readonly data: string | Uint8Array;
-}
+export type File = Data.TaggedEnum.Value<Content, "File">;
 
 /**
  * Source used to generate the response.
@@ -570,10 +709,7 @@ export type Source = UrlSource | DocumentSource;
  * @category content
  * @since 1.0.0
  */
-export interface UrlSource extends BaseSource<"UrlSource"> {
-  readonly url: string;
-  readonly title?: string;
-}
+export type UrlSource = Data.TaggedEnum.Value<Content, "UrlSource">;
 
 /**
  * Document source.
@@ -581,11 +717,7 @@ export interface UrlSource extends BaseSource<"UrlSource"> {
  * @category content
  * @since 1.0.0
  */
-export interface DocumentSource extends BaseSource<"DocumentSource"> {
-  readonly mediaType: string;
-  readonly title: string;
-  readonly filename?: string;
-}
+export type DocumentSource = Data.TaggedEnum.Value<Content, "DocumentSource">;
 
 /**
  * Provider-executed tool approval request.
@@ -593,10 +725,7 @@ export interface DocumentSource extends BaseSource<"DocumentSource"> {
  * @category tools
  * @since 1.0.0
  */
-export interface ToolApprovalRequest extends BaseContent<"ToolApprovalRequest"> {
-  readonly id: string;
-  readonly callId: string;
-}
+export type ToolApprovalRequest = Data.TaggedEnum.Value<Content, "ToolApprovalRequest">;
 
 /**
  * Generated tool call.
@@ -604,13 +733,7 @@ export interface ToolApprovalRequest extends BaseContent<"ToolApprovalRequest"> 
  * @category tools
  * @since 1.0.0
  */
-export interface ToolCall extends BaseContent<"ToolCall"> {
-  readonly id: string;
-  readonly name: string;
-  readonly input: string;
-  readonly providerExecuted?: boolean;
-  readonly dynamic?: boolean;
-}
+export type ToolCall = Data.TaggedEnum.Value<Content, "ToolCall">;
 
 /**
  * Provider-executed tool result.
@@ -618,14 +741,7 @@ export interface ToolCall extends BaseContent<"ToolCall"> {
  * @category tools
  * @since 1.0.0
  */
-export interface ToolResult extends BaseContent<"ToolResult"> {
-  readonly id: string;
-  readonly name: string;
-  readonly result: NonNullable<Schema.Json>;
-  readonly isError?: boolean;
-  readonly preliminary?: boolean;
-  readonly dynamic?: boolean;
-}
+export type ToolResult = Data.TaggedEnum.Value<Content, "ToolResult">;
 
 /**
  * Non-streaming generation result.
@@ -654,26 +770,86 @@ export interface GenerateResult {
  * @category stream
  * @since 1.0.0
  */
-export type StreamPart =
-  | TextStartStreamPart
-  | TextDeltaStreamPart
-  | TextEndStreamPart
-  | ReasoningStartStreamPart
-  | ReasoningDeltaStreamPart
-  | ReasoningEndStreamPart
-  | ToolInputStartStreamPart
-  | ToolInputDeltaStreamPart
-  | ToolInputEndStreamPart
-  | ToolApprovalRequest
-  | ToolCall
-  | ToolResult
-  | File
-  | Source
-  | StreamStartPart
-  | ResponseMetadataStreamPart
-  | FinishStreamPart
-  | RawStreamPart
-  | ErrorStreamPart;
+export type StreamPart = StreamEvent | ToolApprovalRequest | ToolCall | ToolResult | File | Source;
+
+/**
+ * Streaming output event.
+ *
+ * @category stream
+ * @since 1.0.0
+ */
+export type StreamEvent = Data.TaggedEnum<{
+  TextStart: {
+    readonly id: string;
+    readonly providerMetadata?: ProviderMetadata | undefined;
+  };
+  TextDelta: {
+    readonly id: string;
+    readonly delta: string;
+    readonly providerMetadata?: ProviderMetadata | undefined;
+  };
+  TextEnd: {
+    readonly id: string;
+    readonly providerMetadata?: ProviderMetadata | undefined;
+  };
+  ReasoningStart: {
+    readonly id: string;
+    readonly providerMetadata?: ProviderMetadata | undefined;
+  };
+  ReasoningDelta: {
+    readonly id: string;
+    readonly delta: string;
+    readonly providerMetadata?: ProviderMetadata | undefined;
+  };
+  ReasoningEnd: {
+    readonly id: string;
+    readonly providerMetadata?: ProviderMetadata | undefined;
+  };
+  ToolInputStart: {
+    readonly id: string;
+    readonly name: string;
+    readonly providerExecuted?: boolean | undefined;
+    readonly dynamic?: boolean | undefined;
+    readonly title?: string | undefined;
+    readonly providerMetadata?: ProviderMetadata | undefined;
+  };
+  ToolInputDelta: {
+    readonly id: string;
+    readonly delta: string;
+    readonly providerMetadata?: ProviderMetadata | undefined;
+  };
+  ToolInputEnd: {
+    readonly id: string;
+    readonly providerMetadata?: ProviderMetadata | undefined;
+  };
+  StreamStart: {
+    readonly warnings: ReadonlyArray<Warning>;
+  };
+  ResponseMetadata: {
+    readonly id?: string | undefined;
+    readonly timestamp?: Date | undefined;
+    readonly model?: string | undefined;
+  };
+  Finish: {
+    readonly usage: Usage;
+    readonly finish: Finish;
+    readonly providerMetadata?: ProviderMetadata | undefined;
+  };
+  Raw: {
+    readonly value: unknown;
+  };
+  Error: {
+    readonly error: unknown;
+  };
+}>;
+
+/**
+ * Streaming output event constructors.
+ *
+ * @category constructors
+ * @since 1.0.0
+ */
+export const StreamEvent = Data.taggedEnum<StreamEvent>();
 
 /**
  * Text stream block start.
@@ -681,9 +857,7 @@ export type StreamPart =
  * @category stream
  * @since 1.0.0
  */
-export interface TextStartStreamPart extends BaseMetadataStreamPart<"TextStart"> {
-  readonly id: string;
-}
+export type TextStartStreamPart = Data.TaggedEnum.Value<StreamEvent, "TextStart">;
 
 /**
  * Text stream delta.
@@ -691,10 +865,7 @@ export interface TextStartStreamPart extends BaseMetadataStreamPart<"TextStart">
  * @category stream
  * @since 1.0.0
  */
-export interface TextDeltaStreamPart extends BaseMetadataStreamPart<"TextDelta"> {
-  readonly id: string;
-  readonly delta: string;
-}
+export type TextDeltaStreamPart = Data.TaggedEnum.Value<StreamEvent, "TextDelta">;
 
 /**
  * Text stream block end.
@@ -702,9 +873,7 @@ export interface TextDeltaStreamPart extends BaseMetadataStreamPart<"TextDelta">
  * @category stream
  * @since 1.0.0
  */
-export interface TextEndStreamPart extends BaseMetadataStreamPart<"TextEnd"> {
-  readonly id: string;
-}
+export type TextEndStreamPart = Data.TaggedEnum.Value<StreamEvent, "TextEnd">;
 
 /**
  * Reasoning stream block start.
@@ -712,9 +881,7 @@ export interface TextEndStreamPart extends BaseMetadataStreamPart<"TextEnd"> {
  * @category stream
  * @since 1.0.0
  */
-export interface ReasoningStartStreamPart extends BaseMetadataStreamPart<"ReasoningStart"> {
-  readonly id: string;
-}
+export type ReasoningStartStreamPart = Data.TaggedEnum.Value<StreamEvent, "ReasoningStart">;
 
 /**
  * Reasoning stream delta.
@@ -722,10 +889,7 @@ export interface ReasoningStartStreamPart extends BaseMetadataStreamPart<"Reason
  * @category stream
  * @since 1.0.0
  */
-export interface ReasoningDeltaStreamPart extends BaseMetadataStreamPart<"ReasoningDelta"> {
-  readonly id: string;
-  readonly delta: string;
-}
+export type ReasoningDeltaStreamPart = Data.TaggedEnum.Value<StreamEvent, "ReasoningDelta">;
 
 /**
  * Reasoning stream block end.
@@ -733,9 +897,7 @@ export interface ReasoningDeltaStreamPart extends BaseMetadataStreamPart<"Reason
  * @category stream
  * @since 1.0.0
  */
-export interface ReasoningEndStreamPart extends BaseMetadataStreamPart<"ReasoningEnd"> {
-  readonly id: string;
-}
+export type ReasoningEndStreamPart = Data.TaggedEnum.Value<StreamEvent, "ReasoningEnd">;
 
 /**
  * Tool input stream start.
@@ -743,13 +905,7 @@ export interface ReasoningEndStreamPart extends BaseMetadataStreamPart<"Reasonin
  * @category stream
  * @since 1.0.0
  */
-export interface ToolInputStartStreamPart extends BaseMetadataStreamPart<"ToolInputStart"> {
-  readonly id: string;
-  readonly name: string;
-  readonly providerExecuted?: boolean;
-  readonly dynamic?: boolean;
-  readonly title?: string;
-}
+export type ToolInputStartStreamPart = Data.TaggedEnum.Value<StreamEvent, "ToolInputStart">;
 
 /**
  * Tool input stream delta.
@@ -757,10 +913,7 @@ export interface ToolInputStartStreamPart extends BaseMetadataStreamPart<"ToolIn
  * @category stream
  * @since 1.0.0
  */
-export interface ToolInputDeltaStreamPart extends BaseMetadataStreamPart<"ToolInputDelta"> {
-  readonly id: string;
-  readonly delta: string;
-}
+export type ToolInputDeltaStreamPart = Data.TaggedEnum.Value<StreamEvent, "ToolInputDelta">;
 
 /**
  * Tool input stream end.
@@ -768,9 +921,7 @@ export interface ToolInputDeltaStreamPart extends BaseMetadataStreamPart<"ToolIn
  * @category stream
  * @since 1.0.0
  */
-export interface ToolInputEndStreamPart extends BaseMetadataStreamPart<"ToolInputEnd"> {
-  readonly id: string;
-}
+export type ToolInputEndStreamPart = Data.TaggedEnum.Value<StreamEvent, "ToolInputEnd">;
 
 /**
  * Stream start event.
@@ -778,9 +929,7 @@ export interface ToolInputEndStreamPart extends BaseMetadataStreamPart<"ToolInpu
  * @category stream
  * @since 1.0.0
  */
-export interface StreamStartPart extends BaseStreamPart<"StreamStart"> {
-  readonly warnings: ReadonlyArray<Warning>;
-}
+export type StreamStartPart = Data.TaggedEnum.Value<StreamEvent, "StreamStart">;
 
 /**
  * Response metadata stream event.
@@ -788,7 +937,7 @@ export interface StreamStartPart extends BaseStreamPart<"StreamStart"> {
  * @category stream
  * @since 1.0.0
  */
-export type ResponseMetadataStreamPart = ResponseMetadata & BaseStreamPart<"ResponseMetadata">;
+export type ResponseMetadataStreamPart = Data.TaggedEnum.Value<StreamEvent, "ResponseMetadata">;
 
 /**
  * Stream finish event.
@@ -796,10 +945,7 @@ export type ResponseMetadataStreamPart = ResponseMetadata & BaseStreamPart<"Resp
  * @category stream
  * @since 1.0.0
  */
-export interface FinishStreamPart extends BaseMetadataStreamPart<"Finish"> {
-  readonly usage: Usage;
-  readonly finish: Finish;
-}
+export type FinishStreamPart = Data.TaggedEnum.Value<StreamEvent, "Finish">;
 
 /**
  * Raw provider stream event.
@@ -807,9 +953,7 @@ export interface FinishStreamPart extends BaseMetadataStreamPart<"Finish"> {
  * @category stream
  * @since 1.0.0
  */
-export interface RawStreamPart extends BaseStreamPart<"Raw"> {
-  readonly value: unknown;
-}
+export type RawStreamPart = Data.TaggedEnum.Value<StreamEvent, "Raw">;
 
 /**
  * Provider stream error event.
@@ -817,9 +961,7 @@ export interface RawStreamPart extends BaseStreamPart<"Raw"> {
  * @category stream
  * @since 1.0.0
  */
-export interface ErrorStreamPart extends BaseStreamPart<"Error"> {
-  readonly error: unknown;
-}
+export type ErrorStreamPart = Data.TaggedEnum.Value<StreamEvent, "Error">;
 
 /**
  * Streaming generation result.
@@ -844,9 +986,9 @@ export interface StreamResult {
  * @since 1.0.0
  */
 export interface ResponseMetadata {
-  readonly id?: string;
-  readonly timestamp?: Date;
-  readonly model?: string;
+  readonly id?: string | undefined;
+  readonly timestamp?: Date | undefined;
+  readonly model?: string | undefined;
 }
 
 /**
@@ -895,7 +1037,27 @@ export interface Usage {
  * @category results
  * @since 1.0.0
  */
-export type Warning = UnsupportedWarning | CompatibilityWarning | OtherWarning;
+export type Warning = Data.TaggedEnum<{
+  Unsupported: {
+    readonly feature: string;
+    readonly details?: string | undefined;
+  };
+  Compatibility: {
+    readonly feature: string;
+    readonly details?: string | undefined;
+  };
+  Other: {
+    readonly message: string;
+  };
+}>;
+
+/**
+ * Warning constructors.
+ *
+ * @category constructors
+ * @since 1.0.0
+ */
+export const Warning = Data.taggedEnum<Warning>();
 
 /**
  * Unsupported feature warning.
@@ -903,10 +1065,7 @@ export type Warning = UnsupportedWarning | CompatibilityWarning | OtherWarning;
  * @category results
  * @since 1.0.0
  */
-export interface UnsupportedWarning extends BaseWarning<"Unsupported"> {
-  readonly feature: string;
-  readonly details?: string;
-}
+export type UnsupportedWarning = Data.TaggedEnum.Value<Warning, "Unsupported">;
 
 /**
  * Compatibility mode warning.
@@ -914,10 +1073,7 @@ export interface UnsupportedWarning extends BaseWarning<"Unsupported"> {
  * @category results
  * @since 1.0.0
  */
-export interface CompatibilityWarning extends BaseWarning<"Compatibility"> {
-  readonly feature: string;
-  readonly details?: string;
-}
+export type CompatibilityWarning = Data.TaggedEnum.Value<Warning, "Compatibility">;
 
 /**
  * Other provider warning.
@@ -925,9 +1081,7 @@ export interface CompatibilityWarning extends BaseWarning<"Compatibility"> {
  * @category results
  * @since 1.0.0
  */
-export interface OtherWarning extends BaseWarning<"Other"> {
-  readonly message: string;
-}
+export type OtherWarning = Data.TaggedEnum.Value<Warning, "Other">;
 
 /**
  * Generates a non-streaming language model response.

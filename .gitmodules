@@ -5,3 +5,9 @@
 [submodule "references/vercel-ai"]
 	path = references/vercel-ai
 	url = https://github.com/vercel/ai.git
+[submodule "references/openai-node"]
+	path = references/openai-node
+	url = https://github.com/openai/openai-node.git
+[submodule "references/anthropic-sdk-typescript"]
+	path = references/anthropic-sdk-typescript
+	url = https://github.com/anthropics/anthropic-sdk-typescript.git
