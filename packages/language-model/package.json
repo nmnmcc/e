@@ -1,0 +1,16 @@
+{
+  "type": "module",
+  "name": "@nmnmcc/e-language-model",
+  "sideEffects": [],
+  "exports": {
+    "./package.json": "./package.json",
+    ".": "./src/index.ts",
+    "./*": "./src/*.ts",
+    "./internal/*": null,
+    "./*/index": null
+  },
+  "types": "./src/index.ts",
+  "dependencies": {
+    "effect": "4.0.0-beta.88"
+  }
+}

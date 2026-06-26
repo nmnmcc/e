@@ -1,0 +1,7 @@
+[submodule "references/effect"]
+	path = references/effect
+	url = https://github.com/Effect-TS/effect-smol.git
+	shallow = true
+[submodule "references/vercel-ai"]
+	path = references/vercel-ai
+	url = https://github.com/vercel/ai.git
