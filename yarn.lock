@@ -5,6 +5,15 @@ __metadata:
   version: 9
   cacheKey: 10c0
 
+"@ai-sdk/provider@npm:4.0.0":
+  version: 4.0.0
+  resolution: "@ai-sdk/provider@npm:4.0.0"
+  dependencies:
+    json-schema: "npm:^0.4.0"
+  checksum: 10c0/0eb43a0fed32491c7e0d9a7bf86b39be30378cb4633d5376b6b356866bb2326440a92a150340dd673ce227a9c9d8b9328347f8da1f3e377e402c34fe946389d6
+  languageName: node
+  linkType: hard
+
 "@effect/language-service@npm:latest":
   version: 0.86.2
   resolution: "@effect/language-service@npm:0.86.2"
@@ -282,7 +291,17 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@nmnmcc/e-language-model@workspace:packages/language-model":
+"@nmnmcc/e-language-model-ai-sdk@workspace:packages/language-model-ai-sdk":
+  version: 0.0.0-use.local
+  resolution: "@nmnmcc/e-language-model-ai-sdk@workspace:packages/language-model-ai-sdk"
+  dependencies:
+    "@ai-sdk/provider": "npm:4.0.0"
+    "@nmnmcc/e-language-model": "workspace:*"
+    effect: "npm:4.0.0-beta.88"
+  languageName: unknown
+  linkType: soft
+
+"@nmnmcc/e-language-model@workspace:*, @nmnmcc/e-language-model@workspace:packages/language-model":
   version: 0.0.0-use.local
   resolution: "@nmnmcc/e-language-model@workspace:packages/language-model"
   dependencies:
@@ -531,6 +550,13 @@ __metadata:
   version: 4.0.0
   resolution: "isexe@npm:4.0.0"
   checksum: 10c0/5884815115bceac452877659a9c7726382531592f43dc29e5d48b7c4100661aed54018cb90bd36cb2eaeba521092570769167acbb95c18d39afdccbcca06c5ce
+  languageName: node
+  linkType: hard
+
+"json-schema@npm:^0.4.0":
+  version: 0.4.0
+  resolution: "json-schema@npm:0.4.0"
+  checksum: 10c0/d4a637ec1d83544857c1c163232f3da46912e971d5bf054ba44fdb88f07d8d359a462b4aec46f2745efbc57053365608d88bc1d7b1729f7b4fc3369765639ed3
   languageName: node
   linkType: hard
 

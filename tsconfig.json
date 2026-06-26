@@ -6,6 +6,9 @@
     },
     {
       "path": "./packages/language-model"
+    },
+    {
+      "path": "./packages/language-model-ai-sdk"
     }
   ]
 }
